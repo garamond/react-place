@@ -1,11 +1,11 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactPlace = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = (window.React);
 
@@ -36,7 +36,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var NO_MATCHING = 'Unrecognised {{value}}, please check and re-enter.';
-var DEFAULT_COUNTRY = 'US';
 
 var compose = function compose() {
   var fns = arguments;
@@ -49,7 +48,7 @@ var compose = function compose() {
   };
 };
 
-var Location = (function (_React$Component) {
+var Location = function (_React$Component) {
   _inherits(Location, _React$Component);
 
   function Location() {
@@ -71,7 +70,7 @@ var Location = (function (_React$Component) {
     key: 'componentWillMount',
     value: function componentWillMount() {
       this._googlePredictions = [];
-      this._country = this.props.country || DEFAULT_COUNTRY;
+      this._country = this.props.country;
       this._noMatching = this.props.noMatching || NO_MATCHING;
     }
   }, {
@@ -106,22 +105,22 @@ var Location = (function (_React$Component) {
   }, {
     key: '_handleInputChange',
     value: function _handleInputChange(event) {
-      var _this = this;
+      var _this2 = this;
 
       var value = this._getInputValue();
       var updateAutocomplete = compose(this._autocomplete.evaluate.bind(this._autocomplete), function (list) {
-        return _this._autocomplete.list = list;
+        return _this2._autocomplete.list = list;
       }, function (list) {
         return list.map(function (item) {
           return item.description;
         });
       }, function (results) {
-        return _this._googlePredictions = results;
+        return _this2._googlePredictions = results;
       });
       var fail = compose(updateAutocomplete, function (text) {
         return [{ description: text }];
       }, function (text) {
-        return _this._noMatching.replace('{{value}}', text);
+        return _this2._noMatching.replace('{{value}}', text);
       });
       var navKeys = [38, 40, 13, 27];
       var isItNavKey = navKeys.indexOf(event.keyCode) >= 0;
@@ -133,7 +132,7 @@ var Location = (function (_React$Component) {
   }, {
     key: '_handleAutocompleteSelect',
     value: function _handleAutocompleteSelect() {
-      var _this2 = this;
+      var _this3 = this;
 
       var value = this._getInputValue();
       var find = function find(list) {
@@ -148,7 +147,7 @@ var Location = (function (_React$Component) {
       };
       var getPlaceId = compose(validate, find);
       var success = function success(location) {
-        _this2.props.onLocationSet && _this2.props.onLocationSet({
+        _this3.props.onLocationSet && _this3.props.onLocationSet({
           description: value,
           coords: {
             lat: location.lat(),
@@ -167,7 +166,7 @@ var Location = (function (_React$Component) {
   }, {
     key: '_getPredictions',
     value: function _getPredictions(text) {
-      var _this3 = this;
+      var _this4 = this;
 
       var service = (this.props.google || _google2.default).createAutocompleteService();
       var isThereAnyText = !!text;
@@ -176,7 +175,7 @@ var Location = (function (_React$Component) {
         return new _promisePolyfill2.default(function (resolve, reject) {
           service.getPlacePredictions({
             input: text,
-            componentRestrictions: { country: _this3._country },
+            componentRestrictions: _this4._country && { country: _this4._country } || {},
             types: ['(regions)']
           }, function (result) {
             if (result !== null) {
@@ -207,7 +206,7 @@ var Location = (function (_React$Component) {
   }]);
 
   return Location;
-})(_react2.default.Component);
+}(_react2.default.Component);
 
 exports.default = Location;
 ;

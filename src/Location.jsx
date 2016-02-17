@@ -7,7 +7,6 @@ import Promise from 'promise-polyfill';
 import google from './vendor/google';
 
 const NO_MATCHING = 'Unrecognised {{value}}, please check and re-enter.';
-const DEFAULT_COUNTRY = 'US';
 
 var compose = function () {
   var fns = arguments;
@@ -34,7 +33,7 @@ export default class Location extends React.Component {
 
   componentWillMount() {
     this._googlePredictions = [];
-    this._country = this.props.country || DEFAULT_COUNTRY;
+    this._country = this.props.country;
     this._noMatching = this.props.noMatching || NO_MATCHING;
   }
 
@@ -129,7 +128,7 @@ export default class Location extends React.Component {
       return new Promise((resolve, reject) => {
         service.getPlacePredictions({
           input: text,
-          componentRestrictions: { country: this._country },
+          componentRestrictions: (this._country && { country: this._country } || {}),
           types: ['(regions)']
         }, (result) => {
           if (result !== null) {
