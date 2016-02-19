@@ -115,7 +115,7 @@ export default class Location extends React.Component {
     };
 
     this._getCoordinates(getPlaceId(this._googlePredictions)).then(success);
-    this.refs.location.value = '';
+    this.refs.input.value = '';
   }
 
   _getInputValue() {
