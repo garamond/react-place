@@ -25,6 +25,7 @@ export default class Location extends React.Component {
     return (
       <input
         type='text'
+        ref='input'
         className={ this.props.className }
         placeholder={ this.props.placeholder || 'Type your location here.' }
       />
@@ -114,6 +115,7 @@ export default class Location extends React.Component {
     };
 
     this._getCoordinates(getPlaceId(this._googlePredictions)).then(success);
+    this.refs.location.value = '';
   }
 
   _getInputValue() {
